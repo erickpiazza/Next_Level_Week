@@ -1,49 +1,98 @@
-import React from "react";
-import{Feather as Icon} from '@expo/vector-icons'
-import { View, Text, Image, StyleSheet, ImageBackground } from "react-native";
+import React, { useState } from "react";
+import { Feather as Icon } from "@expo/vector-icons";
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  ImageBackground,
+  TextInput,
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native";
 import { RectButton } from "react-native-gesture-handler";
-import {useNavigation} from '@react-navigation/native'
+import { useNavigation } from "@react-navigation/native";
 
 const Home = () => {
   const navigation = useNavigation();
+  const [uf, setUf] = useState("");
+  const [city, setCity] = useState("");
 
-  function handleNavigateToPoints(){
-      navigation.navigate('Points')
+  function handleNavigateToPoints() {
+    navigation.navigate("Points",{
+      uf,
+      city
+    });
   }
   return (
-    <ImageBackground
-      imageStyle={{ width: 274, height: 368 }}
-      source={require("../../assets/home-background.png")}
-      style={styles.container}
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === "ios" ? "padding" : undefined}
     >
-      <View style={styles.main}>
-        <Image source={require("../../assets/logo.png")} />
-        <Text style={styles.title}>Seu Marketplace de coleta de resíduos</Text>
-        <Text style={styles.description}>
-          Ajudamos pessoas a encontrarem pontos de coleta de forma eficiente
-        </Text>
-      </View>
-      <View style={styles.footer}>
-        <RectButton style={styles.button} onPress={handleNavigateToPoints}>
-          <View style={styles.buttonIcon}>
-            <Text><Icon name="arrow-right" color="#fff" size={24} /></Text>
+      <ImageBackground
+        imageStyle={{ width: 274, height: 368 }}
+        source={require("../../assets/home-background.png")}
+        style={styles.container}
+      >
+        <View style={styles.main}>
+          <Image source={require("../../assets/logo.png")} />
+          <View>
+            <Text style={styles.title}>
+              Seu Marketplace de coleta de resíduos
+            </Text>
+            <Text style={styles.description}>
+              Ajudamos pessoas a encontrarem pontos de coleta de forma eficiente
+            </Text>
           </View>
-          <Text style={styles.buttonText}>Entrar</Text>
-        </RectButton>
-      </View>
-    </ImageBackground>
+        </View>
+        <View style={styles.footer}>
+          <TextInput
+            value={uf}
+            style={styles.input}
+            placeholder="Digite a UF"
+            onChangeText={setUf}
+            maxLength={2}
+            autoCapitalize="characters"
+            autoCorrect={false}
+          />
+          <TextInput
+            value={city}
+            style={styles.input}
+            placeholder="Digite a cidade"
+            onChangeText={setCity}
+            autoCorrect={false}
+          />
+          <RectButton style={styles.button} onPress={handleNavigateToPoints}>
+            <View style={styles.buttonIcon}>
+              <Text>
+                <Icon name="arrow-right" color="#fff" size={24} />
+              </Text>
+            </View>
+            <Text style={styles.buttonText}>Entrar</Text>
+          </RectButton>
+        </View>
+      </ImageBackground>
+    </KeyboardAvoidingView>
   );
 };
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 32,
-    
   },
 
   main: {
     flex: 1,
     justifyContent: "center",
+  },
+
+  input: {
+    height: 60,
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    marginBottom: 8,
+    paddingHorizontal: 24,
+    fontSize: 16,
   },
 
   title: {
@@ -67,15 +116,6 @@ const styles = StyleSheet.create({
 
   select: {},
 
-  input: {
-    height: 60,
-    backgroundColor: "#FFF",
-    borderRadius: 10,
-    marginBottom: 8,
-    paddingHorizontal: 24,
-    fontSize: 16,
-  },
-
   button: {
     backgroundColor: "#34CB79",
     height: 60,
@@ -83,7 +123,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     overflow: "hidden",
     alignItems: "center",
-    marginTop: 8,
+    marginTop: 24,
   },
 
   buttonIcon: {
